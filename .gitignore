@@ -129,6 +129,6 @@ dmypy.json
 .pyre/
 
 .idea/
-.ini
-.m3u
+*.ini
+*.m3u
 lists/
