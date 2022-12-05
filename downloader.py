@@ -21,7 +21,7 @@ class Downloader:
         with requests.get(self._config.get_url_list()) as response:
             response.raise_for_status()
 
-            with open(self._iptv_file, 'w') as file:
+            with open(self._iptv_file, 'w', encoding='utf-8') as file:
                 file.write(response.content.decode('utf-8'))
 
         return self._iptv_file
