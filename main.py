@@ -64,7 +64,8 @@ def get_output_filename_for_group_name(group_name: str) -> str:
 
 
 def save_filter_group(filename: str, groups: list) -> None:
-    with open(filename, 'w', encoding='utf-8') as file:
+    path = f"lists/{filename}"
+    with open(path, 'w', encoding='utf-8') as file:
         file.write("\n".join(groups))
 
 
