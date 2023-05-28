@@ -39,8 +39,8 @@ def get_filename():
 def show_menu_with_groups_availables(groups: list) -> int:
     print("Grupos disponibles:")
     print("------------------------------------")
-    for group in groups:
-        print(group)
+    for n, group in enumerate(groups):
+        print(f"{n}. {group[group.find('.')+1:].strip()}")
 
     group_selected = show_user_input()
 
@@ -52,7 +52,7 @@ def show_menu_with_groups_availables(groups: list) -> int:
 
 
 def show_user_input() -> int:
-    return int(input("Grupo para extraer: ")) - 1
+    return int(input("Grupo para extraer: "))
 
 
 def sanitize_group_name(group: str) -> str:
