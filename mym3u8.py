@@ -48,6 +48,9 @@ class MyM3u8:
                          self._playlist.segments if
                          'group-title' in segment.custom_parser_values['extinf_props'].keys()]))
 
+    def extract_groups_from_list(self, groups: list) -> list:
+        return [self.extract_group_from_list(group) for group in groups]
+
     def extract_group_from_list(self, group: str) -> str:
         playlist = [str(segment) for segment in self._playlist.segments if
                     'group-title' in segment.custom_parser_values['extinf_props'].keys() and group ==

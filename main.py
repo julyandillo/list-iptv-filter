@@ -11,21 +11,36 @@ def main():
     my_m3u8 = MyM3u8(downloader.download_file_if_not_exists())
 
     available_groups = sorted(my_m3u8.get_groups())
-    playlist = ''
-    id_group_selected = show_menu_with_groups(available_groups)
-    while id_group_selected > 0:
-        playlist += f"{my_m3u8.extract_group_from_list(available_groups[id_group_selected-1])}\n"
-        id_group_selected = show_menu_with_groups(available_groups)
 
-    filename = get_full_filename_for(input("Nombre de la lista: "))
-    save_filter_list(filename, playlist)
+    selected_groups = get_selected_groups_from(available_groups)
+
+    file_name = get_filename()
+
+    save_filter_group(file_name, my_m3u8.extract_groups_from_list(selected_groups))
 
 
-def show_menu_with_groups(groups: list) -> int:
+def get_selected_groups_from(available_groups):
+    selected_groups = []
+    more_gropups = True
+    while more_gropups:
+        selected_groups.append(available_groups[show_menu_with_groups_availables(available_groups)])
+        input_more_gropups = str(input("¿Más grupos (S/N)?: ")).strip()
+        more_gropups = input_more_gropups == 'S' or input_more_gropups == 's'
+    return selected_groups
+
+
+def get_filename():
+    file_name = input('Nombre para el fichero: ')
+    if not file_name.endswith('.m3u'):
+        file_name += '.m3u'
+    return file_name
+
+
+def show_menu_with_groups_availables(groups: list) -> int:
     print("Grupos disponibles:")
     print("------------------------------------")
-    for n, group in enumerate(groups):
-        print(f"{n+1}. {group[group.find('.')+1:].strip()}")
+    for group in groups:
+        print(group)
 
     group_selected = show_user_input()
 
@@ -37,7 +52,7 @@ def show_menu_with_groups(groups: list) -> int:
 
 
 def show_user_input() -> int:
-    return int(input("Grupo para extraer: "))
+    return int(input("Grupo para extraer: ")) - 1
 
 
 def sanitize_group_name(group: str) -> str:
@@ -48,14 +63,10 @@ def get_output_filename_for_group_name(group_name: str) -> str:
     return f"lists/{group_name}.m3u"
 
 
-def get_full_filename_for(filename: str) -> str:
-    return f"lists/{filename}.m3u"
-
-
-def save_filter_list(filename: str, list_url: str) -> None:
-    with open(filename, 'w', encoding='utf-8') as file:
-        file.write("#EXTM3U\n")
-        file.write(list_url)
+def save_filter_group(filename: str, groups: list) -> None:
+    path = f"lists/{filename}"
+    with open(path, 'w', encoding='utf-8') as file:
+        file.write("\n".join(groups))
 
 
 if __name__ == '__main__':
